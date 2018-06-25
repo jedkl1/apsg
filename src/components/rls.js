@@ -11,7 +11,7 @@ class RLS extends Component {
         this.state = {
             L: 10,
             lambda: 1,
-            gamma: 10,
+            gamma: 1000,
             isSimulating: true,
             results: undefined
         };
@@ -46,21 +46,23 @@ class RLS extends Component {
         let x_n = Array.apply(null, Array(L)).map(Number.prototype.valueOf,0);
 
         let P = math.multiply(gamma, math.identity(L));
-
+        let alpha_n = 0;
         for (let n = 0; n < N; n++) {
             x_n.unshift(x[n]);
             x_n.pop();
             
             y._data[0][n] = math.multiply(math.transpose(f_n), x_n);
             e._data[0][n] = d[n] - y._data[0][n];
-            let alpha_n = 1 / (math.add(lambda, math.multiply(
-                math.multiply(math.transpose(x_n), P),
-                x_n)));
+            let mulx_nPx_n = math.multiply(
+                math.multiply(math.transpose(x_n), P),x_n);
+            alpha_n = 1 / (lambda + mulx_nPx_n);
             f_n = math.add(f_n, math.multiply(math.multiply((alpha_n* e._data[0][n]), P), x_n));
 
-            P = math.multiply((1/lambda), math.subtract(P, 
-                math.multiply(math.multiply(math.multiply(math.multiply(alpha_n, P), x_n), math.transpose(x_n)), P)));
+
+            //P = math.multiply((1/lambda), math.subtract(P, 
+                //math.multiply(math.multiply(math.multiply(math.multiply(alpha_n, P), x_n), math.transpose(x_n)), P)));
             
+            P = math.subtract(P, math.multiply(math.multiply(math.multiply)))
             for(let i = 0; i < 10; i++) {
                 ff._data[i][n] = f_n._data[i];
             }
@@ -123,15 +125,6 @@ class RLS extends Component {
         </form>
         <div className="buttons">
             <button className={"btn btn-primary"} onClick={this.startSimulation}>Simulate</button>
-            {
-                this.state.isSimulating ? 
-                    <div className="spinner">
-                        <div className="cube1"></div>
-                        <div className="cube2"></div>
-                    </div>
-                    :
-                    null
-            }
             <button className={"btn btn-success"} onClick={this.drawPlot}>Draw</button>
         </div>
         {

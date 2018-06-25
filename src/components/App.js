@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 
 import RLS from './rls';
+import LMS from './lms';
 import '../bootstrap-3.3.7-dist/css/bootstrap.min.css';
 
 import '../styles/App.css';
@@ -41,7 +42,7 @@ class App extends Component {
               EWRLS
             </Tab>
             <Tab eventKey={4} title="LMS">
-              LMS
+              <LMS />
             </Tab>
             <Tab eventKey={5} title="NLMS">
               NLMS
