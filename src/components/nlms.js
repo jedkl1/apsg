@@ -4,18 +4,20 @@ import { LineChart, XAxis, YAxis, CartesianGrid, Line, Tooltip } from 'recharts'
 
 import signals from '../signals.json';
 
-class LMS extends Component {
+class NLMS extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             L: 10,
             alpha: 0.1,
+            c: 0.1,
             results: undefined,
             chart: 'e'
         };
         this.handleLChange = this.handleLChange.bind(this);
         this.handleAlphaChange = this.handleAlphaChange.bind(this);
+        this.handleCChange = this.handleCChange.bind(this);
         this.handleChart = this.handleChart.bind(this);
     }
 
@@ -27,7 +29,11 @@ class LMS extends Component {
         this.setState({alpha: Number(event.target.value)});
     }
 
-    lmsExecute(x, d, L, alpha) {
+    handleCChange(event) {
+        this.setState({c: Number(event.target.value)});
+    }
+
+    nlmsExecute(x, d, L, alpha, c) {
         const N = x.length;
         let e = math.zeros(1, N);
         let y = math.zeros(1, N);
@@ -43,7 +49,7 @@ class LMS extends Component {
             y._data[0][n] = math.multiply(math.transpose(f_n), x_n);
             e._data[0][n] = d[n] - y._data[0][n];
             
-            f_n = math.add(f_n, math.multiply((alpha* e._data[0][n]), x_n));
+            f_n = math.add(f_n, math.multiply((1/(c + math.multiply(math.transpose(x_n), x_n))), math.multiply((alpha* e._data[0][n]), x_n)));
 
             for(let i = 0; i < 10; i++) {
                 ff._data[i][n] = f_n._data[i];
@@ -65,12 +71,12 @@ class LMS extends Component {
     }
 
     componentDidMount() {
-        this.lmsExecute(signals.x, signals.d, this.state.L, this.state.alpha);
+        this.nlmsExecute(signals.x, signals.d, this.state.L, this.state.alpha, this.state.c);
     }
 
     componentDidUpdate(prevProps, prevStates) {
-        if(this.state.L !== prevStates.L || this.state.alpha !== prevStates.alpha) {
-            this.lmsExecute(signals.x, signals.d, this.state.L, this.state.alpha);
+        if(this.state.L !== prevStates.L || this.state.alpha !== prevStates.alpha || this.state.c !== prevStates.c) {
+            this.nlmsExecute(signals.x, signals.d, this.state.L, this.state.alpha, this.state.c);
         }
     }
 
@@ -102,6 +108,15 @@ class LMS extends Component {
                     value={this.state.alpha}
                     onChange={this.handleAlphaChange}
                     min={0.01} max={0.99} step={0.01}  />
+            </label><br/>
+            <label>
+                c:
+                <input
+                    type="Number"
+                    className={"form-control"}
+                    value={this.state.c}
+                    onChange={this.handleCChange}
+                    min={-10} max={10} step={0.1}  />
             </label><br/>
         </form>
         <form className={"radios"}>
@@ -147,6 +162,6 @@ class LMS extends Component {
   }
 }
 
-export default LMS;
+export default NLMS;
 
 /* Created by Jedrzej Klocek 20.06.2018*/
