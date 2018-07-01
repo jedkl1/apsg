@@ -107,7 +107,7 @@ class RLS extends Component {
                     min={10} max={100} step={1} />
             </label><br/>
             <label>
-                &lambda;: (for &lambda; = 1 it is a simple RLS)
+                &lambda; (for &lambda; = 1 it is a simple RLS):
                 <input
                     type="Number"
                     className={"form-control"}

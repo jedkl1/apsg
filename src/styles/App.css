@@ -30,8 +30,8 @@
 }
 
 .recharts-wrapper {
-  left: 30%;
-  padding-top: 50px;
+  /* left: 30%; */
+  display: inline-flex;
 }
 
 /* Created by Jedrzej Klocek 20.06.2018*/

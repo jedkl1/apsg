@@ -37,6 +37,13 @@ class App extends Component {
                 It presents work of RLS and LMS algorithms.
                 Please toggle between tabs and then switch algorithm parameters to see differences on charts.
               </h3>
+              <br />
+              <h3>Legend:</h3>
+              <b>L- filter row</b><br/>
+              <b>&lambda;- forgetting constant</b><br/>
+              <b>&alpha;- adaptation constant</b><br/>
+              <b> c- constant which can be used in normalization process</b><br/>
+              <b> &gamma;- initial values ​​of diagonal elements in the inverse estimate matrix of the correlation matrix</b><br/>
             </Tab>
             <Tab eventKey={2} title="EWRLS">
               <RLS/>
